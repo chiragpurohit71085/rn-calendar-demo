@@ -30,7 +30,7 @@ export default function TabTwoScreen() {
           }
         }
       }
-
+      console.log("newItems length - ", newItems.length);
       setItems(newItems);
     }, 1000);
   };
@@ -43,13 +43,14 @@ export default function TabTwoScreen() {
   };
 
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 16 : 14;
+    const fontSize = isFirst ? 16 : 16;
     const color = isFirst ? 'black' : '#43515c';
 
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
-        style={[styles.item, { height: reservation.height }]}
+        // style={[styles.item, { height: reservation.height }]}
+        style={[styles.item]}
         onPress={() => Alert.alert(reservation.name)}>
         <Text style={{ fontSize, color }}>{reservation.name}</Text>
       </TouchableOpacity>
@@ -73,32 +74,22 @@ export default function TabTwoScreen() {
     return date.toISOString().split('T')[0];
   };
 
+  const currentDate = new Date();
+  const minDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+  const maxDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1);
+
   return (
     <Agenda
       testID={testIDs.agenda.CONTAINER}
       items={items}
       loadItemsForMonth={loadItems}
-      selected={'2025-01-01'}
+      selected={currentDate.toISOString().split('T')[0]}
       renderItem={renderItem}
       renderEmptyDate={renderEmptyDate}
       rowHasChanged={rowHasChanged}
       showClosingKnob={true}
-    // markingType={'period'}
-    // markedDates={{
-    //    '2025-01-01': {textColor: '#43515c'},
-    //    '2025-01-02': {textColor: '#43515c'},
-    //    '2025-01-03': {startingDay: true, endingDay: true, color: 'blue'},
-    //    '2025-01-04': {startingDay: true, color: 'blue'},
-    //    '2025-01-05': {endingDay: true, color: 'gray'},
-    //    '2025-01-06': {startingDay: true, color: 'gray'},
-    //    '2025-01-07': {color: 'gray'},
-    //    '2025-01-08': {endingDay: true, color: 'gray'}}}
-    // monthFormat={'yyyy'}
-    // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-    // renderDay={renderDay}
-    // hideExtraDays={false}
-    // showOnlySelectedDayItems
-    // reservationsKeyExtractor={reservationsKeyExtractor}
+      minDate={minDate.toISOString().split('T')[0]}
+      maxDate={maxDate.toISOString().split('T')[0]}
     />
   );
 }
