@@ -14,20 +14,23 @@ export default function TabTwoScreen() {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = timeToString(time);
 
-        if (!newItems[strTime]) {
-          newItems[strTime] = [];
-          
-          const numItems = Math.floor(Math.random() * 3 + 1);
-          for (let j = 0; j < numItems; j++) {
-            newItems[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
-              height: Math.max(50, Math.floor(Math.random() * 150)),
-              day: strTime
-            });
+        // Randomly decide whether to add records for this day
+        if (Math.random() > 0.3) { // 70% chance to add records
+          if (!newItems[strTime]) {
+            newItems[strTime] = [];
+
+            const numItems = Math.floor(Math.random() * 3 + 1);
+            for (let j = 0; j < numItems; j++) {
+              newItems[strTime].push({
+                name: 'Item for ' + strTime + ' #' + j,
+                height: Math.max(50, Math.floor(Math.random() * 150)),
+                day: strTime
+              });
+            }
           }
         }
       }
-      
+
       setItems(newItems);
     }, 1000);
   };
@@ -36,7 +39,7 @@ export default function TabTwoScreen() {
     if (day) {
       return <Text style={styles.customDay}>{day.getDay()}</Text>;
     }
-    return <View style={styles.dayItem}/>;
+    return <View style={styles.dayItem} />;
   };
 
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
@@ -46,9 +49,9 @@ export default function TabTwoScreen() {
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: reservation.height}]}
+        style={[styles.item, { height: reservation.height }]}
         onPress={() => Alert.alert(reservation.name)}>
-        <Text style={{fontSize, color}}>{reservation.name}</Text>
+        <Text style={{ fontSize, color }}>{reservation.name}</Text>
       </TouchableOpacity>
     );
   };
