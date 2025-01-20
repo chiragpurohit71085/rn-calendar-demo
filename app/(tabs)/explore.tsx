@@ -109,9 +109,12 @@ const staticData = {
 
 export default function TabTwoScreen() {
   const [items, setItems] = useState<AgendaSchedule>({});
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [markedDates, setMarkedDates] = useState<{ [key: string]: { marked?: boolean; disabled?: boolean } }>({});
 
   useEffect(() => {
     const newItems: AgendaSchedule = {};
+    const newMarkedDates: { [key: string]: { marked?: boolean; disabled?: boolean } } = {};
 
     staticData.auctions.forEach(auction => {
       const strTime = auction.startDate.split('T')[0];
@@ -123,9 +126,21 @@ export default function TabTwoScreen() {
         height: 50,
         day: strTime
       });
+      newMarkedDates[strTime] = { marked: true };
     });
-    
+
+    // Mark dates without events as disabled
+    const currentDate = new Date();
+    const minDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const maxDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1);
+    for (let d = new Date(minDate); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      const dateString = d.toISOString().split('T')[0];
+      if (!newMarkedDates[dateString]) {
+        newMarkedDates[dateString] = { disabled: true };
+      }
+    }
     setItems(newItems);
+    setMarkedDates(newMarkedDates);
   }, []);
 
   const renderDay = (day) => {
@@ -162,6 +177,13 @@ export default function TabTwoScreen() {
     return r1.name !== r2.name;
   };
 
+  const handleDayPress = (day) => {
+    if (markedDates[day.dateString] && markedDates[day.dateString].disabled) {
+      return; // Do nothing if the date is disabled
+    }
+    setSelectedDate(day.dateString);
+  };
+
   const currentDate = new Date();
   const minDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
   const maxDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1);
@@ -176,11 +198,14 @@ export default function TabTwoScreen() {
       renderEmptyData={() => {
         return renderEmptyDate();
       }}
+      onDayPress={(day) => setSelectedDate(day.dateString)}
+      // onDayPress={handleDayPress}
       rowHasChanged={rowHasChanged}
       showOnlySelectedDayItems={false}
       showClosingKnob={true}
       minDate={minDate.toISOString().split('T')[0]}
       maxDate={maxDate.toISOString().split('T')[0]}
+    // markedDates={markedDates}
     />
   );
 }
