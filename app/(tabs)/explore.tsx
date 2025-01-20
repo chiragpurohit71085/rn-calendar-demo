@@ -11,7 +11,7 @@ const staticData = {
       "type": "Live",
       "status": "STARTED",
       "lotCount": 1,
-      "startDate": "2024-11-31T17:24:04+00:00",
+      "startDate": "2025-01-31T17:24:04+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/3200"
     },
@@ -21,7 +21,7 @@ const staticData = {
       "type": "Live",
       "status": "STARTED",
       "lotCount": 9,
-      "startDate": "2024-11-18T20:13:58+00:00",
+      "startDate": "2025-01-18T20:13:58+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/3171"
     },
@@ -41,7 +41,7 @@ const staticData = {
       "type": "Timed",
       "status": "STARTED",
       "lotCount": 10,
-      "startDate": "2024-11-13T06:38:19+00:00",
+      "startDate": "2025-01-13T06:38:19+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/3152"
     },
@@ -51,8 +51,8 @@ const staticData = {
       "type": "Live",
       "status": "STARTED",
       "lotCount": 10,
-      "startDate": "2024-11-03T09:31:10+00:00",
-      "endDate": "2024-11-06T09:31:10+00:00",
+      "startDate": "2025-01-03T09:31:10+00:00",
+      "endDate": "2025-01-06T09:31:10+00:00",
       "url": "http://sam.local/auctions/catalog/id/3143"
     },
     {
@@ -61,7 +61,7 @@ const staticData = {
       "type": "Timed",
       "status": "STARTED",
       "lotCount": 4,
-      "startDate": "2024-11-27T22:12:48+00:00",
+      "startDate": "2025-01-27T22:12:48+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/3093"
     },
@@ -90,7 +90,7 @@ const staticData = {
       "type": "Hybrid",
       "status": "STARTED",
       "lotCount": 10,
-      "startDate": "2024-11-26T23:15:11+00:00",
+      "startDate": "2025-01-26T23:15:11+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/2964"
     },
@@ -100,7 +100,7 @@ const staticData = {
       "type": "Hybrid",
       "status": "STARTED",
       "lotCount": 21,
-      "startDate": "2024-11-22T06:03:49+00:00",
+      "startDate": "2025-01-22T06:03:49+00:00",
       "endDate": null,
       "url": "http://sam.local/auctions/catalog/id/5883"
     }
@@ -124,7 +124,7 @@ export default function TabTwoScreen() {
         day: strTime
       });
     });
-
+    
     setItems(newItems);
   }, []);
 
@@ -150,6 +150,7 @@ export default function TabTwoScreen() {
   };
 
   const renderEmptyDate = () => {
+    console.log('renderEmptyDate');
     return (
       <View style={styles.emptyDate}>
         <Text>This is empty date!</Text>
@@ -169,11 +170,14 @@ export default function TabTwoScreen() {
     <Agenda
       testID={testIDs.agenda.CONTAINER}
       items={items}
-      loadItemsForMonth={() => {}}
+      loadItemsForMonth={() => { }}
       selected={currentDate.toISOString().split('T')[0]}
       renderItem={renderItem}
-      renderEmptyDate={renderEmptyDate}
+      renderEmptyData={() => {
+        return renderEmptyDate();
+      }}
       rowHasChanged={rowHasChanged}
+      showOnlySelectedDayItems={false}
       showClosingKnob={true}
       minDate={minDate.toISOString().split('T')[0]}
       maxDate={maxDate.toISOString().split('T')[0]}
